@@ -300,7 +300,11 @@ export default {
         },
         { title: "課程名稱", data: "LessonName" },
         { title: "觀看次數", data: "TotalCount" },
-        { title: "觀看時間(秒)", data: "TotalTime" },
+        { title: "觀看時間(時:分:秒)", data: "TotalTime",
+          render: function (data, type, row, meta) {
+            return data + "(" + window.utils.toMmSs(data) + ")";
+          },
+        },
         { title: "完課人數", data: "DoneCount" },
       ];
       var statisticsResponse = await this.$api.getLessonStatistics(start, end);

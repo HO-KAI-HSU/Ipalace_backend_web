@@ -716,7 +716,11 @@ export default {
         },
         { title: "姓名", data: "MemberName" },
         { title: "學校", data: "School" },
-        { title: "課程觀看總時間", data: "TotalTime" },
+        { title: "課程觀看總時間(時:分:秒)", data: "TotalTime",
+          render: function (data, type, row, meta) {
+            return data + "(" + window.utils.toMmSs(data) + ")";
+          },
+        },
         {
           title: "功能",
           data: "MemberID",
