@@ -573,6 +573,7 @@
 <script>
 import $ from "jquery";
 import "datatables.net";
+import user from "../plugins/user";
 
 export default {
   name: "Account",
@@ -670,12 +671,12 @@ export default {
         {
           title: "功能",
           data: "UserID",
-          render: function (data) {
+          render: function (data, type, row, meta) {
             return (
               '<button type="button" class="btn btn-primary" onclick="window.model.editAccount(' +
               data +
               ')"><i class="fas fa-pen"></i></button>' + (
-                data.RoleID == 1 ?
+                user.user.roleId == 1 && user.user.roleId != row.RoleID ?
               '<button type="button" class="btn btn-default" onclick="window.model.deleteAccount(' +
               data +
               ')"><i class="far fa-trash-alt"></i></button>' : '')
