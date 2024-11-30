@@ -1544,3 +1544,34 @@ img {
     font-size:11px;
     color:#555B5D
 }
+
+.member-lesson-summary-container-group{
+    max-width: 100%;
+    display: flex;
+    justify-content:space-around;
+    margin:  50px 50px 50px 50px;
+}
+
+.member-lesson-summary-container{
+    width: 350px;
+    font-size:30px;
+    color:#555B5D;
+    display: flex;
+    align-items:center;
+    flex-direction:column;
+}
+
+.member-lesson-summary-value{
+    font-size:40px;
+    color:#555B5D;
+}
+
+.member-lesson-summary-value-transfer{
+    font-size:20px;
+    color:#555B5D;
+}
+
+.member-lesson-summary-description{
+    font-size:20px;
+    color:#555B5D;
+}

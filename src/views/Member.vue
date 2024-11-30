@@ -183,7 +183,7 @@ export default {
         {
           title: "總觀看時間",
           data: "LessonTotalVisitTime",
-          render: window.Filter.toHHMMSS,
+          render: window.utils.toHhMmSs,
           width: 90,
         },
       ];

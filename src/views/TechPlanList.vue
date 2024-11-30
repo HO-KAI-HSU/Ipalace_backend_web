@@ -185,7 +185,9 @@ export default {
   },
   watch: {
     getDates(val) {
-      this.teachPlanStatistics(val[0], val[1]);
+      var sDate = (val == null ? "" : val[0]);
+      var eDate = (val == null ? "" : val[1]);
+      this.teachPlanStatistics(sDate, eDate);
     }
   },
   methods: {

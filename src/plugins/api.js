@@ -266,6 +266,9 @@ export default {
     getMemberLessonStatistics(startDate, endDate, sortBy) {
         return this.get('/api/backend/GetMemberLessonStatisticList?' + 'startDate=' + startDate + '&endDate=' + endDate+ '&sortBy=' + sortBy);
     },
+    getMemberLessonStatisticsRanking(startDate, endDate, sortBy) {
+        return this.get('/api/backend/GetMemberLessonRankingList?' + 'startDate=' + startDate + '&endDate=' + endDate+ '&sortBy=' + sortBy);
+    },
     getMemberTeachPlanStatistics(startDate, endDate) {
         return this.get('/api/backend/GetMemberTeachPlanStatisticList?' + 'startDate=' + startDate + '&endDate=' + endDate);
     },

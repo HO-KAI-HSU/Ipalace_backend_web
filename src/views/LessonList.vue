@@ -182,7 +182,9 @@ export default {
   },
   watch: {
     getDates(val) {
-      this.lessonStatistics(val[0], val[1]);
+      var sDate = (val == null ? "" : val[0]);
+      var eDate = (val == null ? "" : val[1]);
+      this.lessonStatistics(sDate, eDate);
     }
   },
   methods: {
@@ -302,7 +304,7 @@ export default {
         { title: "觀看次數", data: "TotalCount" },
         { title: "觀看時間(時:分:秒)", data: "TotalTime",
           render: function (data, type, row, meta) {
-            return data + "(" + window.utils.toMmSs(data) + ")";
+            return data + "(" + window.utils.toHhMmSs(data) + ")";
           },
         },
         { title: "完課人數", data: "DoneCount" },

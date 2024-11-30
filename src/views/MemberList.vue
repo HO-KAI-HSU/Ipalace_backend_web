@@ -48,6 +48,19 @@
             <li class="nav-item">
               <a
                 class="nav-link"
+                id="custom-tabs-member-statistics-tab"
+                data-toggle="pill"
+                href="#custom-tabs-member-statistics"
+                role="tab"
+                aria-controls="custom-tabs-member-statistics"
+                aria-selected="false"
+                onclick="window.model.updateMemberStatisticFlag(true)"
+                >會員統計</a
+              >
+            </li>
+            <li class="nav-item">
+              <a
+                class="nav-link"
                 id="custom-tabs-member-statistics-ranking-tab"
                 data-toggle="pill"
                 href="#custom-tabs-member-statistics-ranking"
@@ -61,13 +74,13 @@
             <li class="nav-item">
               <a
                 class="nav-link"
-                id="custom-tabs-member-statistics-tab"
+                id="custom-tabs-member-register-statistics-tab"
                 data-toggle="pill"
-                href="#custom-tabs-member-statistics"
+                href="#custom-tabs-member-register-statistics"
                 role="tab"
-                aria-controls="custom-tabs-member-statistics"
+                aria-controls="custom-tabs-member-register-statistics"
                 aria-selected="false"
-                onclick="window.model.updateStatisticFlag(true)"
+                onclick="window.model.updateRegisterStatisticFlag(true)"
                 >會員註冊增幅分析</a
               >
             </li>
@@ -86,6 +99,83 @@
                   aria-labelledby="custom-tabs-member-tab"
                 >
                   <div id="tabMembers"></div>
+                </div>
+                <div
+                  class="tab-pane fade"
+                  id="custom-tabs-member-statistics"
+                  role="tabpanel"
+                  aria-labelledby="custom-tabs-member-statistics-tab"
+                >
+                  <el-date-picker
+                    v-model="getStatisticsDates" 
+                    name="name"
+                    type="daterange"
+                    align="right"
+                    unlink-panels range-separator="至"
+                    start-placeholder="開始日期"
+                    end-placeholder="結束日期"
+                    value-format='yyyy-MM-dd'
+                    :picker-options="pickerOptions">
+                  </el-date-picker>
+                  <br><br>
+                  <div class="member-lesson-summary-container-group" v-show="isShowMemberLessonSummary">
+                    <div class="member-lesson-summary-container">
+                      <div class="member-lesson-summary-value">
+                        {{ memberLessonSummaryLabels.anonymousTotalCount }}  
+                      </div>
+                      <div class="member-lesson-summary-description">
+                        {{ memberLessonSummaryLabels.anonymousTotalCountLabel  }}  
+                      </div>
+                    </div>
+                    <div class="member-lesson-summary-container">
+                      <div class="member-lesson-summary-value">
+                        {{ memberLessonSummaryLabels.memberTotalCount }}  
+                      </div>
+                      <div class="member-lesson-summary-description">
+                        {{ memberLessonSummaryLabels.memberTotalCountLabel  }}  
+                      </div>
+                    </div>
+                    <div class="member-lesson-summary-container">
+                      <div class="member-lesson-summary-value">
+                        {{ memberLessonSummaryLabels.anonymousTotalTime }}  
+                      </div>
+                      <div class="member-lesson-summary-value-transfer">
+                        {{ memberLessonSummaryLabels.anonymousTransferTotalTime }}  
+                      </div>
+                      <div class="member-lesson-summary-description">
+                        {{ memberLessonSummaryLabels.anonymousTotalTimeLabel  }}  
+                      </div>
+                    </div>
+                    <div class="member-lesson-summary-container">
+                      <div class="member-lesson-summary-value">
+                        {{ memberLessonSummaryLabels.memberTotalTime }}  
+                      </div>
+                      <div class="member-lesson-summary-value-transfer">
+                        {{ memberLessonSummaryLabels.memberTransferTotalTime }}  
+                      </div>
+                      <div class="member-lesson-summary-description">
+                        {{ memberLessonSummaryLabels.memberTotalTimeLabel  }}  
+                      </div>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label>選擇下載檔案類型</label>
+                    <select class="form-control" v-model="selectFileType">
+                      <option value="xls">xls</option>
+                      <option value="html">html</option>
+                      <option value="pdf">pdf</option>
+                    </select>
+                  </div>
+                  <ExcelExport
+                    v-show="isShowMemberStatisticsChart"
+                    class   = "btn btn-default"
+                    :data   = "memberLessonStatisticsExcelDatas"
+                    :fields = "memberLessonStatisticsExcelField"
+                    :type    = "selectFileType"
+                    name    = "會員統計.xls">
+                    下載會員統計
+                  </ExcelExport>
+                  <div id="tabMemberStatistics" v-show="isShowMemberStatisticsChart"></div>
                 </div>
                 <div
                   class="tab-pane fade"
@@ -108,9 +198,9 @@
                 </div>
                 <div
                   class="tab-pane fade"
-                  id="custom-tabs-member-statistics"
+                  id="custom-tabs-member-register-statistics"
                   role="tabpanel"
-                  aria-labelledby="custom-tabs-member-statistics-tab"
+                  aria-labelledby="custom-tabs-member-register-statistics-tab"
                 >
                   <div class="form-group">
                     <label>選擇時間類型</label>
@@ -135,8 +225,24 @@
                   <button type="button" class="btn btn-default" onclick="window.model.getMemberRegisterCountStatisticByDate()">選擇</button>
                 </div>
               </div>
-              <div ><label v-show="isShowRegisterCountChart">{{ registerCountLabels.dateIntervalRegisterCountsLabel }} {{ registerCountLabels.dateIntervalRegisterCounts }}</label></div>
-              <div><label v-show="isShowRegisterCountChart">{{ registerCountLabels.totalRegisterCountsLabel }} {{ registerCountLabels.totalRegisterCounts }}</label></div>
+              <div class="member-lesson-summary-container-group" v-show="isShowRegisterCountChart">
+                <div class="member-lesson-summary-container">
+                  <div class="member-lesson-summary-value">
+                    {{ registerCountLabels.dateIntervalRegisterCounts }}  
+                  </div>
+                  <div class="member-lesson-summary-description">
+                    {{ registerCountLabels.dateIntervalRegisterCountsLabel  }}  
+                  </div>
+                </div>
+                <div class="member-lesson-summary-container">
+                  <div class="member-lesson-summary-value">
+                    {{ registerCountLabels.totalRegisterCounts }}  
+                  </div>
+                  <div class="member-lesson-summary-description">
+                    {{ registerCountLabels.totalRegisterCountsLabel  }}  
+                  </div>
+                </div>
+              </div>
               <br>
               <IEcharts v-show="isShowRegisterCountChart" :option="registerCountBar" :loading="loading" style="width: 1200px; height: 400px" ></IEcharts>
               <br>
@@ -249,6 +355,13 @@ export default {
         '當前註冊總人數' : 'TotalRegisterCount',
       },
       memberRegisterCountExcelDatas : [],
+      memberLessonStatisticsExcelField : {
+        姓名: 'MemberName',
+        學校: 'School',
+        課程觀看次數: 'TotalCount',
+        '課程觀看總時間(秒)' : 'TotalTime',
+      },
+      memberLessonStatisticsExcelDatas : [],
       lessonVisitCountExcelField : {
         姓名: 'MemberName',
         學校: 'School',
@@ -269,6 +382,7 @@ export default {
       teachPlanDownloadCountExcelDatas : [],
       isShowRegisterCountChart:false,
       isShowRankingChart: false,
+      isShowMemberStatisticsChart: false,
       loading: false,
       rankingLoading: false,
       registerCountBar: {
@@ -475,6 +589,18 @@ export default {
           }
         ]
       },
+      memberLessonSummaryLabels: {
+        anonymousTotalCount : 0,
+        anonymousTotalCountLabel : "非登入會員觀看總次數",
+        anonymousTotalTime : 0,
+        anonymousTransferTotalTime : "",
+        anonymousTotalTimeLabel : "非登入會員觀看總時間(秒)",
+        memberTotalCount : 0,
+        memberTotalCountLabel : "會員觀看總次數",
+        memberTotalTime : 0,
+        memberTransferTotalTime : "",
+        memberTotalTimeLabel : "會員觀看總時間(秒)",
+      },
       registerCountLabels: {
         dateIntervalRegisterCountsLabel : '從 {0} 到 {1} 註冊人數',
         dateIntervalRegisterCounts : 0,
@@ -482,6 +608,8 @@ export default {
         totalRegisterCounts : 0,
       },
       dateRegisterCountList: [],
+      selectStatisticsSdate: '',
+      selectStatisticsEdate: '',
       selectRankingSdate: '',
       selectRankingEdate: '',
       selectEdate: '',
@@ -490,6 +618,7 @@ export default {
       selectFileType: 'xls',
       selectDwonloadType: 1,
       getDates: [],
+      getStatisticsDates: [],
       getRaningkDates: [],
       pickerOptions: {
         shortcuts: [{
@@ -531,12 +660,17 @@ export default {
   },
   watch: {
     async getDates(val) {
-      this.selectSdate = val[0];
-      this.selectEdate = val[1];
+      this.selectSdate = (val == null ? "" : val[0]);
+      this.selectSdate = (val == null ? "" : val[1]);
+    },
+    async getStatisticsDates(val) {
+      var sDate = (val == null ? "" : val[0]);
+      var eDate = (val == null ? "" : val[1]);
+      this.initMemberLessonStatisticsBarChart(sDate, eDate);
     },
     async getRaningkDates(val) {
-      this.selectRankingSdate = val[0];
-      this.selectRankingEdate = val[1];
+      this.selectRankingSdate = (val == null ? "" : val[0]);
+      this.selectRankingEdate = (val == null ? "" : val[1]);
     }
   },
   methods: {
@@ -600,20 +734,36 @@ export default {
     updateMenagementFlag() {
       this.isShowRankingChart = false;
       this.isShowRegisterCountChart = false;
+      this.isShowMemberStatisticsChart = false;
+      this.isShowMemberLessonSummary = false;
       this.loading = false;
+      this.statisticsLoading = false;
       this.rankingLoading = false;
     },
-    updateStatisticFlag(flag) {
+    updateRegisterStatisticFlag(flag) {
       this.isShowRankingChart = false;
       this.isShowRegisterCountChart = true;
+      this.isShowMemberStatisticsChart = false;
+      this.isShowMemberLessonSummary = false;
       this.loading = flag;
       this.getRegisterCountsByDate(this.selectSdate, this.selectEdate, 1);
       this.initRegisterCountBarChart(this.selectSdate, this.selectEdate, 1);
       this.loading = false;
     },
+    updateMemberStatisticFlag(flag) {
+      this.isShowRankingChart = false;
+      this.isShowRegisterCountChart = false;
+      this.isShowMemberStatisticsChart = true;
+      this.isShowMemberLessonSummary = true;
+      this.statisticsLoading = flag;
+      this.initMemberLessonStatisticsBarChart(this.selectStatisticsSdate, this.selectStatisticsEdate);
+      this.statisticsLoading = false;
+    },
     updateRankingStatisticFlag(flag) {
       this.isShowRankingChart = true;
       this.isShowRegisterCountChart = false;
+      this.isShowMemberStatisticsChart = false;
+      this.isShowMemberLessonSummary = false;
       this.rankingLoading = flag;
       this.initLessonVisitCountBarChart(this.selectRankingSdate, this.selectRankingEdate);
       this.initLessonVisitTimeBarChart(this.selectRankingSdate, this.selectRankingEdate);
@@ -662,6 +812,52 @@ export default {
       this.registerCountLabels.totalRegisterCounts = registerCount.RegisterCounts;
       this.dateRegisterCountList = registerCount.DateRegisterCounts;
     },
+    async initMemberLessonStatisticsBarChart(startDate, endDate) {
+      var colMemberTotalCounts = [
+        {
+          title: "#",
+          render: function (data, type, row, meta) {
+            return meta.row + 1;
+          },
+        },
+        { title: "姓名", data: "MemberName" },
+        { title: "學校", data: "School" },
+        { title: "課程觀看次數", data: "TotalCount" },
+        { title: "課程觀看總時間(時:分:秒)", data: "TotalTime",
+          render: function (data, type, row, meta) {
+            return data + "(" + window.utils.toHhMmSs(data) + ")";
+          },
+        },
+        {
+          title: "功能",
+          data: "MemberID",
+          width: 180,
+          render: function (data, type, row, meta) {
+            if (row['MemberID'] == 0) {
+              return "";
+            } else {
+              return (
+                '<button type="button" class="btn btn-default" onclick="window.model.editItem(' +
+                data +
+                ')">編輯</button>'
+              );
+            }
+          },
+        },
+      ];
+      var datas = await this.$api.getMemberLessonStatistics(startDate, endDate);
+      this.memberLessonStatisticsExcelDatas = datas.MemberLessonStatisticList;
+      this.createDataTable("#tabMemberStatistics", colMemberTotalCounts, datas.MemberLessonStatisticList, {
+        "searching": false, 
+        "paging": false,
+      });
+      this.memberLessonSummaryLabels.anonymousTotalCount = datas.AnonymousTotalCount;
+      this.memberLessonSummaryLabels.anonymousTotalTime = datas.AnonymousTotalTime;
+      this.memberLessonSummaryLabels.anonymousTransferTotalTime = "(" + window.utils.toHhMmSs(datas.AnonymousTotalTime) + ") 時:分:秒";
+      this.memberLessonSummaryLabels.memberTotalCount = datas.MemberTotalCount;
+      this.memberLessonSummaryLabels.memberTotalTime = datas.MemberTotalTime;
+      this.memberLessonSummaryLabels.memberTransferTotalTime = "(" + window.utils.toHhMmSs(datas.MemberTotalTime) + ") 時:分:秒";
+    },
     async initLessonVisitCountBarChart(startDate, endDate) {
       var colMemberTotalCounts = [
         {
@@ -690,7 +886,7 @@ export default {
           },
         },
       ];
-      var datas = await this.$api.getMemberLessonStatistics(startDate, endDate, "Count");
+      var datas = await this.$api.getMemberLessonStatisticsRanking(startDate, endDate, "Count");
       this.lessonVisitCountExcelDatas = datas;
       this.createDataTable("#tabMembers1", colMemberTotalCounts, datas, {
         "searching": false, 
@@ -718,7 +914,7 @@ export default {
         { title: "學校", data: "School" },
         { title: "課程觀看總時間(時:分:秒)", data: "TotalTime",
           render: function (data, type, row, meta) {
-            return data + "(" + window.utils.toMmSs(data) + ")";
+            return data + "(" + window.utils.toHhMmSs(data) + ")";
           },
         },
         {
@@ -738,7 +934,7 @@ export default {
           },
         },
       ];
-      var datas = await this.$api.getMemberLessonStatistics(startDate, endDate, "Time");
+      var datas = await this.$api.getMemberLessonStatisticsRanking(startDate, endDate, "Time");
       this.lessonVisitTimeExcelDatas = datas;
       this.createDataTable("#tabMembers2", colMemberTotalTimes, datas, {
         "searching": false, 
