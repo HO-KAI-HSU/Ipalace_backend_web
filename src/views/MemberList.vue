@@ -661,7 +661,7 @@ export default {
   watch: {
     async getDates(val) {
       this.selectSdate = (val == null ? "" : val[0]);
-      this.selectSdate = (val == null ? "" : val[1]);
+      this.selectEdate = (val == null ? "" : val[1]);
     },
     async getStatisticsDates(val) {
       var sDate = (val == null ? "" : val[0]);
@@ -781,6 +781,9 @@ export default {
         },
         { title: "日期", data: "Title" },
         { title: "註冊人數", data: "Count" },
+        { title: "一般使用者註冊人數", data: "GeneralTotalRegisterCount" },
+        { title: "學生註冊人數", data: "StudentTotalRegisterCount" },
+        { title: "老師註冊人數", data: "TeacherTotalRegisterCount" },
         { title: "增幅率(%)", data: "GrowthRate" },
         { title: "當前註冊總人數", data: "TotalRegisterCount" },
       ];
